@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+sudo yum -y install git-all memcached postgresql-devel postgresql-server libxml2-devel libxslt-devel  gcc-c++ gnupg graphviz which
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+sudo systemctl start memcached
+sudo systemctl enable memcached
+sudo sh -c "echo postgres:smartvm | chpasswd"
+sudo -u postgres initdb -D /var/lib/pgsql/data
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+sudo -u postgres psql -c "CREATE ROLE root SUPERUSER LOGIN PASSWORD 'smartvm'"
+sudo gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+curl -sSL https://get.rvm.io | sudo bash -s stable
+source /etc/profile.d/rvm.sh
+rvmsudo rvm install 2.0
+bash -l -c 'rvm use 2.0 --default'
+sudo usermod -a -G rvm `whoami`
+newgrp rvm
+git clone -b  https://github.com/Ladas/manageiq.git
+cd manageiq
+source $(rvm 2.0 do rvm env --path)
+gem install bundler -v "~>1.7.4"
+cd vmdb
+bundle install --without qpid:metric_fu
+cd ..
+rake build:shared_objects
+cd vmdb
+cp config/database.pg.yml config/database.yml
+bundle exec rake evm:db:reset
+bundle exec rake db:seed 
+bundle exec rake evm:start

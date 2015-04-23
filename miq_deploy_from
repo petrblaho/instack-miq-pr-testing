@@ -1,0 +1,43 @@
+#!/usr/bin/bash
+
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -u|--user)
+    GITHUB_USER="$2"
+    shift
+    ;;
+    -b|--b)
+    BRANCH="$2"
+    shift
+    ;;
+    -i|--image)
+    IMAGE="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift
+done
+
+MIQ_VM_NAME=miq
+DEV=$(ip r | grep default | awk {'print $5'})
+HOST_IP=$(ip a s dev $DEV | grep 'inet ' | awk {'print $2'} | awk -F '/' {'print $1'})
+
+INSTACK_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac instack) | awk '{print $3;}')
+
+./generate_miq_install --user $GITHUB_USER --branch $BRANCH
+./miq_modify_image --image $IMAGE --password blackmagic
+./miq_provision --image $IMAGE --miq-vm-name $MIQ_VM_NAME
+
+MIQ_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac $MIQ_VM_NAME) | awk '{print $3;}')
+
+./setup_routing --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
+./print_info --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
+
+
+# TODO: update ALLOW_HOSTS in /etc/openstack-dashboard/local_settings on INSTACK VM with labmachine name

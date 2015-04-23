@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -u|--user)
+    GITHUB_USER="$2"
+    shift
+    ;;
+    -b|--b)
+    BRANCH="$2"
+    shift
+    ;;
+    -i|--image)
+    IMAGE="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift
+done
+
+MIQ_INSTALL_TEMPLATE=miq_install_template
+MIQ_INSTALL_TARGET=miq_install
+
+sed -e "s;%GITHUB_USER%;$GITHUB_USER;g" -e "s;%BRANCH%;$BRANCH;g" $MIQ_INSTALL_TEMPLATE > $MIQ_INSTALL_TARGET
+

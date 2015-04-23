@@ -1,0 +1,55 @@
+#!/usr/bin/bash
+
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -i|--image)
+    SOURCE_IMAGE="$2"
+    shift
+    ;;
+    -n|--miq-vm-name)
+    MIQ_VM_NAME="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift
+done
+
+MIQ_IMAGE=/var/lib/libvirt/images/miq.qcow2
+
+virsh destroy $MIQ_VM_NAME
+virsh undefine $MIQ_VM_NAME
+
+sudo cp $SOURCE_IMAGE $MIQ_IMAGE
+
+tripleo configure-vm \
+    --name $MIQ_VM_NAME \
+    --image $MIQ_IMAGE \
+    --seed \
+    --libvirt-nic-driver virtio \
+    --arch x86_64 \
+    --memory 6291456 \
+    --cpus 1
+
+virsh start $MIQ_VM_NAME
+
+timeout_seconds=120
+elapsed_seconds=0
+while true; do
+    MIQ_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac $MIQ_VM_NAME) | awk '{print $3;}')
+    if [ -n "$MIQ_IP" ]; then
+        break
+    fi
+    sleep 3
+    (( elapsed_seconds += 3 ))
+    if [ $elapsed_seconds -ge $timeout_seconds ]; then
+        echo "ManageIQ VM never got an IP address from the libvirt default network."
+	break
+    fi
+done
+
