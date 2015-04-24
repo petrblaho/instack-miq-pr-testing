@@ -9,7 +9,7 @@ case $key in
     GITHUB_USER="$2"
     shift
     ;;
-    -b|--b)
+    -b|--branch)
     BRANCH="$2"
     shift
     ;;
