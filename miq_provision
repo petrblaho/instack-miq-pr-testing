@@ -21,6 +21,7 @@ shift
 done
 
 MIQ_IMAGE=/var/lib/libvirt/images/miq.qcow2
+export LIBVIRT_DEFAULT_URI=qemu:///system
 
 virsh destroy $MIQ_VM_NAME
 virsh undefine $MIQ_VM_NAME
