@@ -1,7 +1,14 @@
 #!/usr/bin/bash
-sudo yum -y install git-all memcached postgresql-devel postgresql-server libxml2-devel libxslt-devel  gcc-c++ gnupg graphviz which
-sudo systemctl stop firewalld
-sudo systemctl disable firewalld
+
+# wait till network is up
+sleep 10
+
+# install deps
+sudo yum -y install tar git-all memcached postgresql-devel postgresql-server libxml2-devel libxslt-devel  gcc-c++ gnupg graphviz which
+
+# allow port for MIQ
+sudo firewall-cmd --add-port 3000/tcp
+
 sudo systemctl start memcached
 sudo systemctl enable memcached
 sudo sh -c "echo postgres:smartvm | chpasswd"
@@ -9,10 +16,12 @@ sudo -u postgres initdb -D /var/lib/pgsql/data
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo -u postgres psql -c "CREATE ROLE root SUPERUSER LOGIN PASSWORD 'smartvm'"
+
+# Michal Papis (RVM signing) <mpapis@gmail.com>
 sudo gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | sudo bash -s stable
 source /etc/profile.d/rvm.sh
-rvmsudo rvm install 2.0
+rvm install 2.0
 bash -l -c 'rvm use 2.0 --default'
 sudo usermod -a -G rvm `whoami`
 newgrp rvm

@@ -50,5 +50,3 @@ while true; do
 	break
     fi
 done
-
-# TODO: print info about INSTACK
