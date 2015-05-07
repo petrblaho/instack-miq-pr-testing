@@ -49,4 +49,4 @@ sudo iptables -t nat -A PREROUTING -p tcp -d $HOST_IP --dport 3000 -j DNAT --to-
 sudo iptables -t nat -A PREROUTING -p tcp -d $HOST_IP --dport 2901 -j DNAT --to-destination $MIQ_IP:22
 
 sudo ip route add 192.0.2.0/24 via $INSTACK_IP
-
+ 

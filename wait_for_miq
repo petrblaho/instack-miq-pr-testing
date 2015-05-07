@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -m|--miq-ip)
+    MIQ_IP="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift
+done
+
+ssh -o StrictHostKeyChecking=no -t root@$MIQ_IP 'tail -f --pid $(lsof /root/virt-sysprep-firstboot.log | grep -m1 ^tee\  | awk "{print \$2}") /root/virt-sysprep-firstboot.log'
+
+
+
+timeout_seconds=600
+elapsed_seconds=0
+while true; do
+    MIQ_DASH=$(curl --silent http://$MIQ_IP:3000 | grep 'ManageIQ: Dashboard')
+    if [ $? -eq 0 ]; then
+        echo ""
+        echo "MIQ running."
+	echo ""
+	exit 0
+    fi
+    sleep 3
+    printf "."
+    (( elapsed_seconds += 3 ))
+    if [ $elapsed_seconds -ge $timeout_seconds ]; then
+        echo ""
+        echo "ManageIQ dashboard failed to start."
+	echo ""
+	exit 1
+    fi
+done

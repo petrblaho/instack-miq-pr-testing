@@ -37,7 +37,7 @@ INSTACK_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm
 MIQ_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac $MIQ_VM_NAME) | awk '{print $3;}')
 
 ./setup_routing --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
+./wait_for_miq --miq-ip $MIQ_IP
+
+
 ./print_info --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
-
-
-# TODO: update ALLOW_HOSTS in /etc/openstack-dashboard/local_settings on INSTACK VM with labmachine name
