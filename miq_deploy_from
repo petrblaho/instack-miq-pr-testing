@@ -31,7 +31,7 @@ HOST_IP=$(ip a s dev $DEV | grep 'inet ' | awk {'print $2'} | awk -F '/' {'print
 INSTACK_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac instack) | awk '{print $3;}')
 
 ./generate_miq_install --user $GITHUB_USER --branch $BRANCH
-./miq_modify_image --image $IMAGE --password blackmagic
+./miq_build_image --image $IMAGE --password blackmagic
 ./miq_provision --image $IMAGE --miq-vm-name $MIQ_VM_NAME
 
 MIQ_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac $MIQ_VM_NAME) | awk '{print $3;}')
