@@ -23,8 +23,10 @@ ssh -o StrictHostKeyChecking=no -t root@$MIQ_IP 'tail -f --pid $(lsof /root/virt
 timeout_seconds=600
 elapsed_seconds=0
 while true; do
-    MIQ_DASH=$(curl --silent http://$MIQ_IP:3000 | grep 'ManageIQ: Dashboard')
-    if [ $? -eq 0 ]; then
+    # MIQ_DASH=$(curl --silent http://$MIQ_IP:3000 | grep 'ManageIQ: Dashboard')
+    # if [ $? -eq 0 ]; then
+    MIQ_DASH_STATUS=$(curl --silent --output /dev/null http://$MIQ_IP:3000 --write-out "%{http_code}")
+    if [ $MIQ_DASH_STATUS -eq 200 ]; then
         echo ""
         echo "MIQ running."
 	echo ""
