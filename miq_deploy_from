@@ -24,17 +24,14 @@ esac
 shift
 done
 
-MIQ_VM_NAME=miq
-DEV=$(ip r | grep default | awk {'print $5'})
-HOST_IP=$(ip a s dev $DEV | grep 'inet ' | awk {'print $2'} | awk -F '/' {'print $1'})
-
-INSTACK_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac instack) | awk '{print $3;}')
+source set_variables
 
 ./generate_miq_install --user $GITHUB_USER --branch $BRANCH
 ./miq_build_image --image $IMAGE --password blackmagic
 ./miq_provision --image $IMAGE --miq-vm-name $MIQ_VM_NAME
 
-MIQ_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac $MIQ_VM_NAME) | awk '{print $3;}')
+# to set MIQ_IP
+source set_variables
 
 ./setup_routing --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
 ./wait_for_miq --miq-ip $MIQ_IP
