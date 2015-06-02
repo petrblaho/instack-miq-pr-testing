@@ -25,28 +25,7 @@ shift
 done
 
 
-timeout_seconds=600
-elapsed_seconds=0
-while true; do
-    MIQ_DASH=$(curl --silent http://$MIQ_IP:3000 | grep 'ManageIQ: Dashboard')
-    if [ $? -eq 0 ]; then
-        echo ""
-        echo "Done."
-        echo "ManageIQ dashboard: http://$HOST_IP:3000" 
-        echo "ManageIQ VM: SSH access:" 
-        echo "ssh admin@$MIQ_IP from this host; password smartvm"
-        echo "ssh admin@$HOST_IP -p 2901 from outside; password smartvm"
-        break
-    fi
-    sleep 3
-    echo "Waiting for ManageIQ dashboard to come up"
-    (( elapsed_seconds += 3 ))
-    if [ $elapsed_seconds -ge $timeout_seconds ]; then
-        echo ""
-        echo "ManageIQ dashboard failed to start."
-        echo "Try to SSH and see what happened:" 
-        echo "ssh admin@$MIQ_IP from this host; password smartvm"
-        echo "ssh admin@$HOST_IP -p 2901 from outside; password smartvm"
-	break
-    fi
-done
+echo "ManageIQ dashboard: http://$HOST_IP:3000" 
+echo "ManageIQ VM: SSH access:" 
+echo "ssh admin@$MIQ_IP from this host; password smartvm"
+echo "ssh admin@$HOST_IP -p 2901 from outside; password smartvm"
