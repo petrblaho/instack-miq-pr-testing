@@ -37,4 +37,4 @@ cd vmdb
 cp config/database.pg.yml config/database.yml
 bundle exec rake evm:db:reset
 bundle exec rake db:seed 
-bundle exec rake evm:start
+HOME=/root bundle exec rake evm:start
