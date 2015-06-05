@@ -39,6 +39,6 @@ source set_variables
 source set_variables
 
 # register instack undercloud in miq as OpenstackInfra Provider
-curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"EmsOpenstackInfra","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}]}'
+./miq_register_instack --miq-ip $MIQ_IP --instack-ip $INSTACK_IP --os-username $OS_USERNAME --os-password $OS_PASSWORD
 
 ./print_info --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP

@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -m|--miq-ip)
+    MIQ_IP="$2"
+    shift
+    ;;
+    -i|--instack-ip)
+    INSTACK_IP="$2"
+    shift
+    ;;
+    -u|--os-username)
+    OS_USERNAME="$2"
+    shift
+    ;;
+    -p|--os-password)
+    OS_PASSWORD="$2"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift
+done
+
+curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"EmsOpenstackInfra","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}]}'
