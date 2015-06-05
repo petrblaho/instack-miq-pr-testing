@@ -25,3 +25,8 @@ if test -n "$STACKRC"; then
 	OS_PASSWORD=$(echo "$STACKRC" | grep OS_PASSWORD | awk -F= '{print $2}')
 	OS_USERNAME=$(echo "$STACKRC" | grep OS_USERNAME | awk -F= '{print $2}')
 fi
+
+if test -n "$INSTACK_IP"; then
+	SSH_USERNAME='heat-admin'
+	SSH_KEY=$(echo '"'$(ssh root@$INSTACK_IP 'cat /home/stack/.ssh/id_rsa')'"' | json_reformat)
+fi

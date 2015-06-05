@@ -21,6 +21,14 @@ case $key in
     OS_PASSWORD="$2"
     shift
     ;;
+    -s|--ssh-username)
+    SSH_USERNAME="$2"
+    shift
+    ;;
+    -k|--ssh-key)
+    SSH_KEY="$2"
+    shift
+    ;;
     *)
             # unknown option
     ;;
@@ -28,4 +36,4 @@ esac
 shift
 done
 
-curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"EmsOpenstackInfra","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}]}'
+curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"EmsOpenstackInfra","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}, {"auth_type":"ssh_keypair", "userid":"'"$SSH_USERNAME"'","auth_key":'"$SSH_KEY"'}]}'
