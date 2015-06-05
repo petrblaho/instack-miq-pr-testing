@@ -36,9 +36,7 @@ source set_variables
 ./setup_routing --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
 ./wait_for_miq --miq-ip $MIQ_IP
 
-STACKRC=$(ssh root@$INSTACK_IP 'cat stackrc')
-OS_PASSWORD=$(echo "$STACKRC" | grep OS_PASSWORD | awk -F= '{print $2}')
-OS_USERNAME=$(echo "$STACKRC" | grep OS_USERNAME | awk -F= '{print $2}')
+source set_variables
 
 # register instack undercloud in miq as OpenstackInfra Provider
 curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"EmsOpenstackInfra","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}]}'
