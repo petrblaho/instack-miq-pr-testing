@@ -29,5 +29,17 @@ TARGET_SSH_KEY_DIR=/root/.ssh
 TARGET_SSH_KEY_FILE=$TARGET_SSH_KEY_DIR/authorized_keys
 TARGET_SSHD_CONFIG_FILE=/etc/ssh/sshd_config
 
-virt-builder fedora-21 --size 15G --format qcow2 -o $MIQ_IMAGE --install lsof --mkdir $TARGET_SSH_KEY_DIR --write $TARGET_SSH_KEY_FILE:"$SSH_KEY" --run-command "echo >> $TARGET_SSH_KEY_FILE" --chmod 0644:$TARGET_SSH_KEY_FILE --edit $TARGET_SSHD_CONFIG_FILE:'s/#?PubkeyAuthentication\s+.*/PubkeyAuthentication yes/' --root-password password:$PASSWORD --firstboot miq_install --run-command 'setfiles -W -v /etc/selinux/targeted/contexts/files/file_contexts /root/.ssh'
+virt-builder fedora-21 \
+    --size 15G \
+    --format qcow2 \
+    --output $MIQ_IMAGE \
+    --install lsof \
+    --mkdir $TARGET_SSH_KEY_DIR \
+    --write $TARGET_SSH_KEY_FILE:"$SSH_KEY" \
+    --run-command "echo >> $TARGET_SSH_KEY_FILE" \
+    --chmod 0644:$TARGET_SSH_KEY_FILE \
+    --edit $TARGET_SSHD_CONFIG_FILE:'s/#?PubkeyAuthentication\s+.*/PubkeyAuthentication yes/' \
+    --root-password password:$PASSWORD \
+    --firstboot miq_install \
+    --run-command 'setfiles -W -v /etc/selinux/targeted/contexts/files/file_contexts /root/.ssh'
 
