@@ -28,6 +28,8 @@ SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
 TARGET_SSH_KEY_DIR=/root/.ssh
 TARGET_SSH_KEY_FILE=$TARGET_SSH_KEY_DIR/authorized_keys
 TARGET_SSHD_CONFIG_FILE=/etc/ssh/sshd_config
+TARGET_PSQL_CONFIG_FILE=/var/lib/pgsql/data/postgresql.conf
+TARGET_PSQL_HBA_CONFIG_FILE=/var/lib/pgsql/data/pg_hba.conf
 
 virt-builder fedora-21 \
     --size 15G \
@@ -41,6 +43,8 @@ virt-builder fedora-21 \
     --run-command "sh -c 'echo postgres:smartvm | chpasswd'" \
     --run-command "sudo -u postgres initdb -E UTF8 -D /var/lib/pgsql/data" \
     --edit $TARGET_SSHD_CONFIG_FILE:'s/#?PubkeyAuthentication\s+.*/PubkeyAuthentication yes/' \
+    --edit $TARGET_PSQL_CONFIG_FILE:"s/#?listen_addresses\s+=\s+'localhost'/listen_addresses = '*'/" \
+    --run-command "echo 'host    all             all             .redhat.com            trust' >> $TARGET_PSQL_HBA_CONFIG_FILE" \
     --root-password password:$PASSWORD \
     --firstboot miq_install
 

@@ -8,6 +8,8 @@ sudo yum -y install tar git-all memcached libxml2-devel libxslt-devel  gcc-c++ g
 
 # allow port for MIQ
 sudo firewall-cmd --add-port 3000/tcp
+# allow port for POSTGRESQL
+sudo firewall-cmd --add-port 5432/tcp
 
 sudo systemctl start memcached
 sudo systemctl enable memcached
