@@ -27,7 +27,7 @@ done
 source set_variables
 
 ./generate_miq_install --user $GITHUB_USER --branch $BRANCH
-./miq_build_image --image $IMAGE --password blackmagic
+./miq_build_image --image $IMAGE --password smartvm
 ./miq_provision --image $IMAGE --miq-vm-name $MIQ_VM_NAME
 
 # to set MIQ_IP
