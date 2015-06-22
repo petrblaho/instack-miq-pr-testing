@@ -33,13 +33,20 @@ virt-builder fedora-21 \
     --size 15G \
     --format qcow2 \
     --output $MIQ_IMAGE \
-    --install lsof \
+    --install postgresql-devel,postgresql-server,lsof \
     --mkdir $TARGET_SSH_KEY_DIR \
     --write $TARGET_SSH_KEY_FILE:"$SSH_KEY" \
     --run-command "echo >> $TARGET_SSH_KEY_FILE" \
     --chmod 0644:$TARGET_SSH_KEY_FILE \
     --edit $TARGET_SSHD_CONFIG_FILE:'s/#?PubkeyAuthentication\s+.*/PubkeyAuthentication yes/' \
     --root-password password:$PASSWORD \
-    --firstboot miq_install \
-    --run-command 'setfiles -W -v /etc/selinux/targeted/contexts/files/file_contexts /root/.ssh'
+    --firstboot miq_install
+
+# we need to relabel files to have correct selinux labels
+# there is a bug with selinux relabeling with virt-* tools when used with network - 
+# temporaly injected /etc/resolv.conf needed for network when modifying image
+# is left with bad selinux label and NetworkManager cannot work with that after
+# VM boots fromthat image
+virt-customize -a $MIQ_IMAGE --no-network \
+    --run-command 'setfiles -W -v /etc/selinux/targeted/contexts/files/file_contexts /'
 
