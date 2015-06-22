@@ -39,6 +39,6 @@ source set_variables
 source set_variables
 
 # register instack undercloud in miq as OpenstackInfra Provider
-./miq_register_instack --miq-ip $MIQ_IP --instack-ip $INSTACK_IP --os-username $OS_USERNAME --os-password $OS_PASSWORD
+./miq_register_instack --miq-ip $MIQ_IP --instack-ip $INSTACK_IP --os-username $OS_USERNAME --os-password $OS_PASSWORD --ssh-username $SSH_USERNAME --ssh-key "$SSH_KEY"
 
 ./print_info --instack-ip $INSTACK_IP --miq-ip $MIQ_IP --host-ip $HOST_IP
