@@ -38,6 +38,8 @@ virt-builder fedora-21 \
     --write $TARGET_SSH_KEY_FILE:"$SSH_KEY" \
     --run-command "echo >> $TARGET_SSH_KEY_FILE" \
     --chmod 0644:$TARGET_SSH_KEY_FILE \
+    --run-command "sh -c 'echo postgres:smartvm | chpasswd'" \
+    --run-command "sudo -u postgres initdb -E UTF8 -D /var/lib/pgsql/data" \
     --edit $TARGET_SSHD_CONFIG_FILE:'s/#?PubkeyAuthentication\s+.*/PubkeyAuthentication yes/' \
     --root-password password:$PASSWORD \
     --firstboot miq_install

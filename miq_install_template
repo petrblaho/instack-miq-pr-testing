@@ -11,8 +11,7 @@ sudo firewall-cmd --add-port 3000/tcp
 
 sudo systemctl start memcached
 sudo systemctl enable memcached
-sudo sh -c "echo postgres:smartvm | chpasswd"
-sudo -u postgres initdb -D /var/lib/pgsql/data
+
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo -u postgres psql -c "CREATE ROLE root SUPERUSER LOGIN PASSWORD 'smartvm'"
