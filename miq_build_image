@@ -35,7 +35,7 @@ virt-builder fedora-21 \
     --size 15G \
     --format qcow2 \
     --output $MIQ_IMAGE \
-    --install postgresql-devel,postgresql-server,lsof \
+    --install tar,git-all,libxml2-devel,libxslt-devel,gcc-c++,gnupg,graphviz,memcached,postgresql-devel,postgresql-server,which,lsof \
     --mkdir $TARGET_SSH_KEY_DIR \
     --write $TARGET_SSH_KEY_FILE:"$SSH_KEY" \
     --run-command "echo >> $TARGET_SSH_KEY_FILE" \

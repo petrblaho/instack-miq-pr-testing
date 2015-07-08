@@ -3,9 +3,6 @@
 # wait till network is up
 sleep 10
 
-# install deps
-sudo yum -y install tar git-all memcached libxml2-devel libxslt-devel  gcc-c++ gnupg graphviz which
-
 # allow port for MIQ
 sudo firewall-cmd --add-port 3000/tcp
 # allow port for POSTGRESQL
