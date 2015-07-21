@@ -15,18 +15,9 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo -u postgres psql -c "CREATE ROLE root SUPERUSER LOGIN PASSWORD 'smartvm'"
 
-# Michal Papis (RVM signing) <mpapis@gmail.com>
-sudo gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-curl -sSL https://get.rvm.io | sudo bash -s stable
-source /etc/profile.d/rvm.sh
-rvm install 2.0
-bash -l -c 'rvm use 2.0 --default'
-sudo usermod -a -G rvm `whoami`
-newgrp rvm
 git clone -b %BRANCH% https://github.com/%GITHUB_USER%/manageiq.git
 cd manageiq
-source $(rvm 2.0 do rvm env --path)
-gem install bundler -v "~>1.7.4"
+gem install bundler
 bundle install --without qpid:metric_fu
 cp config/database.pg.yml config/database.yml
 bundle exec rake evm:db:reset
