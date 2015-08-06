@@ -10,6 +10,8 @@ INSTACK_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm
 if test -n "$INSTACK_IP"; then
 	OS_USERNAME=$(ssh root@$INSTACK_IP 'source stackrc; echo $OS_USERNAME')
 	OS_PASSWORD=$(ssh root@$INSTACK_IP 'source stackrc; echo $OS_PASSWORD')
+	OS_AUTH_URL=$(ssh root@$INSTACK_IP 'source stackrc; echo $OS_AUTH_URL')
+	OS_AUTH_IP=$(echo $OS_AUTH_URL | sed -n 's/\([0-9]\{1,3\}\.\)\{3\}[0-9]\{1,3\}/\nip&\n/gp' | grep ip | sed 's/ip//')
 fi
 
 if test -n "$MIQ_VM_NAME"; then
