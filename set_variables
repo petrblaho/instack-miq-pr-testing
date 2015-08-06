@@ -8,22 +8,12 @@ HOST_IP=$(ip a s dev $DEV | grep 'inet ' | awk {'print $2'} | awk -F '/' {'print
 INSTACK_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac instack) | awk '{print $3;}')
 
 if test -n "$INSTACK_IP"; then
-	STACKRC=$(ssh root@$INSTACK_IP 'cat stackrc')
-	OS_PASSWORD=$(echo "$STACKRC" | grep OS_PASSWORD | awk -F= '{print $2}')
-	OS_USERNAME=$(echo "$STACKRC" | grep OS_USERNAME | awk -F= '{print $2}')
+	OS_USERNAME=$(ssh root@$INSTACK_IP 'source stackrc; echo $OS_USERNAME')
+	OS_PASSWORD=$(ssh root@$INSTACK_IP 'source stackrc; echo $OS_PASSWORD')
 fi
 
 if test -n "$MIQ_VM_NAME"; then
 	MIQ_IP=$(cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac $MIQ_VM_NAME) | awk '{print $3;}')
-fi
-
-if test -n "$INSTACK_IP"; then
-	STACKRC=$(ssh root@$INSTACK_IP 'cat stackrc')
-fi
-
-if test -n "$STACKRC"; then
-	OS_PASSWORD=$(echo "$STACKRC" | grep OS_PASSWORD | awk -F= '{print $2}')
-	OS_USERNAME=$(echo "$STACKRC" | grep OS_USERNAME | awk -F= '{print $2}')
 fi
 
 if test -n "$INSTACK_IP"; then
