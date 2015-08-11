@@ -36,4 +36,4 @@ esac
 shift
 done
 
-curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"EmsOpenstackInfra","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}, {"auth_type":"ssh_keypair", "userid":"'"$SSH_USERNAME"'","auth_key":'"$SSH_KEY"'}]}'
+curl -u admin:smartvm -X POST http://$MIQ_IP:3000/api/providers -H "Content-Type: application/json" -H "Accept: application/json" -d '{"type":"ManageIQ::Providers::Openstack::InfraManager","name":"OpenstackInfra Instack","hostname":"'"$INSTACK_IP"'","ipaddress":"'"$INSTACK_IP"'","credentials":[{"userid":"'"$OS_USERNAME"'","password":"'"$OS_PASSWORD"'"}, {"auth_type":"ssh_keypair", "userid":"'"$SSH_USERNAME"'","auth_key":'"$SSH_KEY"'}]}'
