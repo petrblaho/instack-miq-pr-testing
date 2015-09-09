@@ -20,6 +20,7 @@ cd manageiq
 gem install bundler
 bundle install --without qpid:metric_fu
 cp config/database.pg.yml config/database.yml
+cp certs/v2_key.dev certs/v2_key
 bundle exec rake evm:db:reset
 bundle exec rake db:seed 
 HOME=/root bundle exec rake evm:start
