@@ -31,7 +31,7 @@ TARGET_SSHD_CONFIG_FILE=/etc/ssh/sshd_config
 TARGET_PSQL_CONFIG_FILE=/var/lib/pgsql/data/postgresql.conf
 TARGET_PSQL_HBA_CONFIG_FILE=/var/lib/pgsql/data/pg_hba.conf
 
-virt-builder fedora-21 \
+virt-builder fedora-22 \
     --size 15G \
     --format qcow2 \
     --output $MIQ_IMAGE \
