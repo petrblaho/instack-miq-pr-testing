@@ -46,7 +46,9 @@ virt-builder fedora-22 \
     --edit $TARGET_PSQL_CONFIG_FILE:"s/#?listen_addresses\s+=\s+'localhost'/listen_addresses = '*'/" \
     --run-command "echo 'host    all             all             .redhat.com            trust' >> $TARGET_PSQL_HBA_CONFIG_FILE" \
     --root-password password:$PASSWORD \
-    --firstboot miq_install
+    --firstboot miq_install \
+    --run-command "mv /usr/lib/virt-sysprep/firstboot.service /usr/lib/systemd/system/" \
+    --run-command "ln -sf /usr/lib/systemd/system/firstboot.service /etc/systemd/system/default.target.wants"
 
 # we need to relabel files to have correct selinux labels
 # there is a bug with selinux relabeling with virt-* tools when used with network - 
